@@ -34,21 +34,23 @@
       const container = document.getElementById("product-list");
       container.innerHTML = "";
       data.forEach(item => {
-        container.innerHTML += `
-          <div class="bg-white rounded shadow p-4">
-            <img src="${item.ImageURL}" alt="${item.Product}" class="w-full h-40 object-cover rounded mb-3">
-            <h2 class="text-xl font-bold mb-1">${item.Product}</h2>
-            <p class="text-sm text-gray-600 mb-1">کیٹیگری: ${item.Category}</p>
-            <p class="text-sm mb-1">${item.Description}</p>
-            <p class="text-green-700 font-semibold mb-2">قیمت: ${item.Price}</p>
-            <a href="${item.WhatsAppLink}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded block text-center">واٹس ایپ پر آرڈر کریں</a>
-          </div>`;
+        if (item.Product && item.Price && item.ImageURL) {
+          container.innerHTML += `
+            <div class="bg-white rounded shadow p-4">
+              <img src="${item.ImageURL}" alt="${item.Product}" class="w-full h-40 object-cover rounded mb-3">
+              <h2 class="text-xl font-bold mb-1">${item.Product}</h2>
+              <p class="text-sm text-gray-600 mb-1">کیٹیگری: ${item.Category}</p>
+              <p class="text-sm mb-1">${item.Description}</p>
+              <p class="text-green-700 font-semibold mb-2">قیمت: ${item.Price}</p>
+              <a href="${item.WhatsAppLink}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded block text-center">واٹس ایپ پر آرڈر کریں</a>
+            </div>`;
+        }
       });
     }
 
     window.addEventListener("DOMContentLoaded", () => {
       Tabletop.init({
-        key: '1aYRpXmzaYGPdm-OMLhiffmF6l5xaHbO-TnZxGkvYh-E',
+        key: '1Vbsaj_GMkoSAUsZ7FKDnVhHA5rs1qxuF9cuFRsPC9Fg',
         callback: showProducts,
         simpleSheet: true
       });
