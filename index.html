@@ -1,60 +1,362 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en" class="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شکارپور آن لائن دکان</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Tabletop.js/1.5.1/tabletop.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ibrahim Ahmed - Premium Shop</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins :wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos @2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css "/>
+
   <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --accent-color: gold;
+    }
+
+    .dark {
+      --bg-color: #1a1a1a;
+      --text-color: #f9f9f9;
+      --card-bg: rgba(30, 30, 30, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
-      font-family: 'Noto Nastaliq Urdu', serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text-color);
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1601653009193-0ee1cfe5c3cf ') no-repeat center center/cover;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 0 2rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem 2rem;
+      border-radius: 15px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 3rem 0 2rem;
+      font-size: 1.8rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .product-info {
+      padding: 1rem;
+    }
+
+    .product-info h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .price {
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    .buy-btn {
+      background: var(--accent-color);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--glass-border);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    .social-icons a {
+      margin: 0 0.5rem;
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        background: var(--card-bg);
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 200px;
+        padding: 1rem;
+        display: none;
+        border-top: 1px solid var(--glass-border);
+      }
+
+      nav.open ul {
+        display: block;
+      }
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <header class="bg-green-600 text-white py-6 text-center shadow-md">
-    <h1 class="text-3xl font-bold">شکارپور آن لائن دکان</h1>
-    <p class="text-sm">روزمرہ کی ضروری اشیاء — براہ راست آپ کے فون پر</p>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Ibrahim Ahmed</div>
+    <nav id="navbar">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#electronics">Electronics</a></li>
+        <li><a href="#clothing">Clothing</a></li>
+        <li><a href="#beauty">Beauty</a></li>
+        <li><a href="#shoes">Shoes</a></li>
+      </ul>
+    </nav>
+    <button class="toggle-btn" onclick="toggleDarkMode()">🌙</button>
   </header>
 
-  <main class="container mx-auto px-4 py-8">
-    <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-right">
-      مصنوعات لوڈ ہو رہی ہیں...
-    </div>
-  </main>
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <h1>Welcome to Ibrahim Ahmed Premium Mall</h1>
+  </section>
 
-  <footer class="bg-green-700 text-white text-center py-4">
-    <p>© 2025 شکارپور دکان — اردو اے آئی کے تعاون سے</p>
+  <!-- Featured Products -->
+  <h2 class="section-title" data-aos="fade-up">Featured Products</h2>
+  <div class="products-grid" id="featured-products" data-aos="fade-up">
+    <!-- Product Cards will be inserted here -->
+  </div>
+
+  <!-- Electronics Section -->
+  <h2 class="section-title" id="electronics" data-aos="fade-up">Electronics</h2>
+  <div class="products-grid" id="electronics-products" data-aos="fade-up"></div>
+
+  <!-- Clothing Section -->
+  <h2 class="section-title" id="clothing" data-aos="fade-up">Clothing</h2>
+  <div class="products-grid" id="clothing-products" data-aos="fade-up"></div>
+
+  <!-- Beauty Section -->
+  <h2 class="section-title" id="beauty" data-aos="fade-up">Beauty</h2>
+  <div class="products-grid" id="beauty-products" data-aos="fade-up"></div>
+
+  <!-- Shoes Section -->
+  <h2 class="section-title" id="shoes" data-aos="fade-up">Shoes</h2>
+  <div class="products-grid" id="shoes-products" data-aos="fade-up"></div>
+
+  <!-- Footer -->
+  <footer>
+    <p>Contact: <a href="https://wa.me/03193487467 " target="_blank">WhatsApp Me</a></p>
+    <p>Owner: Ibrahim Ahmed</p>
+    <div class="social-icons">
+      <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
   </footer>
 
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img src="" alt="Product Preview" id="lightbox-img">
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="https://unpkg.com/aos @2.3.4/dist/aos.js"></script>
   <script>
-    function showProducts(data) {
-      const container = document.getElementById("product-list");
-      container.innerHTML = "";
-      data.forEach(item => {
-        if (item.Product && item.Price && item.ImageURL) {
-          container.innerHTML += `
-            <div class="bg-white rounded shadow p-4">
-              <img src="${item.ImageURL}" alt="${item.Product}" class="w-full h-40 object-cover rounded mb-3">
-              <h2 class="text-xl font-bold mb-1">${item.Product}</h2>
-              <p class="text-sm text-gray-600 mb-1">کیٹیگری: ${item.Category}</p>
-              <p class="text-sm mb-1">${item.Description}</p>
-              <p class="text-green-700 font-semibold mb-2">قیمت: ${item.Price}</p>
-              <a href="${item.WhatsAppLink}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded block text-center">واٹس ایپ پر آرڈر کریں</a>
-            </div>`;
-        }
+    // Initialize AOS
+    AOS.init();
+
+    const products = [
+      {
+        id: 1,
+        category: "electronics",
+        name: "Wireless Headphones",
+        price: "$59.99",
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400 "
+      },
+      {
+        id: 2,
+        category: "clothing",
+        name: "Stylish T-Shirt",
+        price: "$29.99",
+        image: "https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=400 "
+      },
+      {
+        id: 3,
+        category: "beauty",
+        name: "Facial Cream",
+        price: "$19.99",
+        image: "https://images.unsplash.com/photo-1595072500-226b5ac2f4df?w=400 "
+      },
+      {
+        id: 4,
+        category: "shoes",
+        name: "Casual Sneakers",
+        price: "$49.99",
+        image: "https://images.unsplash.com/photo-1600180758890-7fdc3f902cc6?w=400 "
+      },
+      {
+        id: 5,
+        category: "electronics",
+        name: "Smart Watch",
+        price: "$129.99",
+        image: "https://images.unsplash.com/photo-1523206489230-c012c64b2b48?w=400 "
+      },
+      {
+        id: 6,
+        category: "clothing",
+        name: "Summer Dress",
+        price: "$39.99",
+        image: "https://images.unsplash.com/photo-1611747978029-be6ce94ab8d4?w=400 "
+      }
+    ];
+
+    function generateProducts() {
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" class="product-img" onclick="openLightbox('${product.image}')">
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <div class="price">${product.price}</div>
+            <button class="buy-btn" onclick="whatsappBuy('${product.name}')">Buy Now</button>
+          </div>
+        `;
+        document.getElementById(`${product.category}-products`).appendChild(card);
+        document.getElementById("featured-products").appendChild(card.cloneNode(true));
       });
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      Tabletop.init({
-        key: '1Vbsaj_GMkoSAUsZ7FKDnVhHA5rs1qxuF9cuFRsPC9Fg',
-        callback: showProducts,
-        simpleSheet: true
-      });
-    });
+    function whatsappBuy(name) {
+      const message = encodeURIComponent(`Hi, I am interested in buying ${name}. Please guide me.`);
+      window.open(`https://wa.me/03193487467?text= ${message}`, '_blank');
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    function openLightbox(imgSrc) {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      lightbox.style.display = "flex";
+      lightboxImg.src = imgSrc;
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+
+    generateProducts();
   </script>
 </body>
 </html>
