@@ -231,6 +231,29 @@
 
   categories.forEach(c => displayItems(c));
 </script>
+  // Category Toggle Logic
+  document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll("nav a");
+    const sections = document.querySelectorAll(".section");
+
+    // Event: on category click
+    navLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href").substring(1); // remove #
+        sections.forEach(sec => {
+          const id = sec.getAttribute("id");
+          const itemsGrid = sec.querySelector(".items-grid");
+          if (id === targetId) {
+            itemsGrid.style.display = itemsGrid.style.display === "none" ? "grid" : "none";
+          } else {
+            itemsGrid.style.display = "none";
+          }
+        });
+        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  });
 
 </body>
 </html>
