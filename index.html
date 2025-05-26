@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ابراہیم شکارپوری شاپنگ مال</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background: linear-gradient(135deg, #f3f9f1, #ffffff);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(to right, #d0f0c0, #aee1f9);
+      text-align: center;
+      padding: 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #1b5e20;
+    }
+    header p {
+      font-size: 14px;
+      color: #333;
+      margin-top: 8px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      background-color: #f1f1f1;
+      padding: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      margin: 8px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: bold;
+    }
+    nav a:hover {
+      color: #004d40;
+      text-decoration: underline;
+    }
+    .section {
+      padding: 30px 15px;
+    }
+    .section h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 25px;
+    }
+    .items-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      padding: 15px;
+      text-align: center;
+      position: relative;
+    }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ابراہیم شکارپوری شاپنگ مال</h1>
+  <p>ایک مکمل آن لائن شاپنگ حل — ہر گھر کے لیے</p>
+</header>
+
+<nav>
+  <a href="#grocery">گروسری</a>
+  <a href="#vegetables">سبزیاں و پھل</a>
+  <a href="#accessories">موبائل اسیسریز</a>
+</nav>
+
+<section class="section" id="grocery">
+  <h2>گروسری</h2>
+  <div class="items-grid" id="groceryItems"></div>
+  <form class="admin-form" onsubmit="addItem('grocery'); return false;">
+    <input type="text" id="groceryName" placeholder="نام">
+    <input type="text" id="groceryPrice" placeholder="قیمت">
+    <input type="file" id="groceryImg">
+    <button type="submit">ایڈ کریں</button>
+  </form>
+</section>
+
+<section class="section" id="vegetables">
+  <h2>سبزیاں و پھل</h2>
+  <div class="items-grid" id="vegetablesItems"></div>
+  <form class="admin-form" onsubmit="addItem('vegetables'); return false;">
+    <input type="text" id="vegetablesName" placeholder="نام">
+    <input type="text" id="vegetablesPrice" placeholder="قیمت">
+    <input type="file" id="vegetablesImg">
+    <button type="submit">ایڈ کریں</button>
+  </form>
+</section>
+
+<section class="section" id="accessories">
+  <h2>موبائل اسیسریز</h2>
+  <div class="items-grid" id="accessoriesItems"></div>
+  <form class="admin-form" onsubmit="addItem('accessories'); return false;">
+    <input type="text" id="accessoriesName" placeholder="نام">
+    <input type="text" id="accessoriesPrice" placeholder="قیمت">
+    <input type="file" id="accessoriesImg">
+    <button type="submit">ایڈ کریں</button>
+  </form>
+</section>
+<footer>
+  © 2025 ابراہیم شکارپوری
+</footer>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const isAdmin = urlParams.get('admin') === 'on';
+
+  if (isAdmin) {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.admin-form').forEach(form => {
+        form.style.display = 'block';
+      });
+    });
+  }
+
+  const categories = ['grocery', 'vegetables', 'accessories'];
+
+  function addItem(cat) {
+    const name = document.getElementById(`${cat}Name`).value;
+    const price = document.getElementById(`${cat}Price`).value;
+    const imgInput = document.getElementById(`${cat}Img`);
+    const file = imgInput.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = e.target.result;
+        saveItem(cat, name, price, img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveItem(cat, name, price, '');
+    }
+  }
+
+  function saveItem(cat, name, price, img) {
+    const newItem = { name, price, img };
+    const data = JSON.parse(localStorage.getItem(cat)) || [];
+    data.push(newItem);
+    localStorage.setItem(cat, JSON.stringify(data));
+    displayItems(cat);
+  }
+
+  function deleteItem(cat, index) {
+    const data = JSON.parse(localStorage.getItem(cat)) || [];
+    data.splice(index, 1);
+    localStorage.setItem(cat, JSON.stringify(data));
+    displayItems(cat);
+  }
+
+  function displayItems(cat) {
+    const container = document.getElementById(`${cat}Items`);
+    container.innerHTML = '';
+    const data = JSON.parse(localStorage.getItem(cat)) || [];
+    data.forEach((item, index) => {
+      container.innerHTML += `
+        <div class="card">
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>${item.price}</p>
+          <a href="https://wa.me/923193487567?text=میں%20${item.name}%20خریدنا%20چاہتا%20ہوں" target="_blank" style="display:block;margin-top:10px;color:white;background:#25D366;padding:6px;border-radius:5px;text-decoration:none;">WhatsApp آرڈر</a>
+          ${isAdmin ? `<div class="edit-buttons"><button onclick="deleteItem('${cat}', ${index})">حذف کریں</button></div>` : ''}
+        </div>
+      `;
+    });
+  }
+
+  categories.forEach(c => displayItems(c));
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const navLinks = document.querySelectorAll("nav a");
+    const sections = document.querySelectorAll(".section");
+
+    sections.forEach(sec => {
+      const itemsGrid = sec.querySelector(".items-grid");
+      if (itemsGrid) itemsGrid.style.display = "none";
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href").substring(1);
+        sections.forEach(sec => {
+          const id = sec.getAttribute("id");
+          const itemsGrid = sec.querySelector(".items-grid");
+          if (id === targetId) {
+            itemsGrid.style.display = itemsGrid.style.display === "none" ? "grid" : "none";
+          } else {
+            itemsGrid.style.display = "none";
+          }
+        });
+        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
